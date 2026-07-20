@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<h1>PWA Icons Generator</h1>
+<p>Open this file in a browser, then right-click each icon and "Save Image As" to download the PNG files.</p>
+<canvas id="canvas"></canvas>
+<script>
+const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+sizes.forEach(size => {
+  canvas.width = size;
+  canvas.height = size;
+  
+  // Background
+  ctx.fillStyle = '#0a0a0b';
+  ctx.fillRect(0, 0, size, size);
+  
+  // Rounded corners
+  const r = size * 0.23;
+  ctx.beginPath();
+  ctx.roundRect(0, 0, size, size, r);
+  ctx.clip();
+  
+  // Note lines
+  const margin = size * 0.23;
+  const lineHeight = size * 0.08;
+  
+  // Title
+  ctx.fillStyle = '#e8e8ec';
+  ctx.fillRect(margin, margin * 0.6, size * 0.53, lineHeight);
+  
+  // Lines
+  ctx.fillStyle = '#5c5c60';
+  for (let i = 0; i < 3; i++) {
+    ctx.fillRect(margin, margin * 0.6 + lineHeight * (1.5 + i * 0.9), size * 0.4, lineHeight * 0.6);
+  }
+  
+  // Dots
+  const dots = ['#0a84ff', '#30d158', '#ff9f0a'];
+  const dotX = size * 0.65;
+  dots.forEach((color, i) => {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(dotX, margin * 0.6 + lineHeight * (1.5 + i * 0.9) + lineHeight * 0.3, size * 0.03, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  
+  // Download link
+  const link = document.createElement('a');
+  link.download = `icon-${size}x${size}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.textContent = `Download ${size}x${size}`;
+  link.style.display = 'block';
+  link.style.margin = '10px';
+  document.body.appendChild(link);
+});
+</script>
+</body>
+</html>
